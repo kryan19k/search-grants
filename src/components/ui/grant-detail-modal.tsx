@@ -14,7 +14,7 @@ import {
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Grant } from "@/data/mockGrants";
+import { Grant } from "@/lib/grants-api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 interface GrantDetailModalProps {
@@ -105,7 +105,13 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
                 Funding Amount
               </div>
               <div className="text-lg font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                {formatCurrency(grant.amount.min)} - {formatCurrency(grant.amount.max)}
+                {grant.amount.max > 0 ? (
+                  grant.amount.min > 0 && grant.amount.min !== grant.amount.max
+                    ? `${formatCurrency(grant.amount.min)} - ${formatCurrency(grant.amount.max)}`
+                    : formatCurrency(grant.amount.max)
+                ) : (
+                  <span className="text-slate-400">See Details</span>
+                )}
               </div>
             </motion.div>
 
@@ -181,9 +187,10 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
               Close
             </Button>
             <Button
-              className="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white"
+              className="flex-1 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white"
+              onClick={() => window.open(grant.applicationUrl, '_blank')}
             >
-              Apply Now
+              Apply on Grants.gov
               <ExternalLink className="w-4 h-4 ml-2" />
             </Button>
           </div>

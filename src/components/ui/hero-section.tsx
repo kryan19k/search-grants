@@ -12,9 +12,9 @@ interface HeroSectionProps {
 
 export function HeroSection({ searchQuery, onSearchChange }: HeroSectionProps) {
   const stats = [
-    { icon: Sparkles, label: "Active Grants", value: "2,500+" },
-    { icon: TrendingUp, label: "Total Funding", value: "$50B+" },
-    { icon: Users, label: "Organizations", value: "10,000+" },
+    { icon: Sparkles, label: "Active Grants", value: "1,500+" },
+    { icon: TrendingUp, label: "Available Funding", value: "$200B+" },
+    { icon: Users, label: "Federal Agencies", value: "100+" },
   ];
 
   return (

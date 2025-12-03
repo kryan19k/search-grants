@@ -1,11 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Calendar, Building2, ArrowRight, Sparkles } from "lucide-react";
+import { Calendar, Building2, ArrowRight, Sparkles, ExternalLink, DollarSign } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Grant } from "@/data/mockGrants";
+import { Grant } from "@/lib/grants-api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 interface GrantCardProps {
@@ -23,6 +23,10 @@ const categoryColors: Record<string, string> = {
   "Social Services": "from-indigo-500 to-blue-500",
   Research: "from-teal-500 to-cyan-500",
   "Small Business": "from-orange-500 to-red-500",
+  Agriculture: "from-lime-500 to-green-500",
+  Infrastructure: "from-gray-500 to-slate-500",
+  Defense: "from-red-600 to-rose-600",
+  Other: "from-slate-500 to-slate-600",
 };
 
 export function GrantCard({ grant, index, onClick }: GrantCardProps) {
@@ -119,31 +123,62 @@ export function GrantCard({ grant, index, onClick }: GrantCardProps) {
             {grant.description}
           </p>
 
-          {/* Footer */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-700/50">
-            <div>
-              <div className="text-xs text-slate-500 mb-1">Funding Amount</div>
-              <div className="text-lg font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                {formatCurrency(grant.amount.min)} - {formatCurrency(grant.amount.max)}
+          {/* Funding & Deadline */}
+          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-700/50">
+            <div className="bg-slate-800/50 rounded-lg p-3">
+              <div className="flex items-center gap-1 text-xs text-slate-500 mb-1">
+                <DollarSign className="w-3 h-3" />
+                Award Amount
               </div>
+              {grant.amount.max > 0 ? (
+                <div className="text-sm font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                  {grant.amount.min > 0 && grant.amount.min !== grant.amount.max 
+                    ? `${formatCurrency(grant.amount.min)} - ${formatCurrency(grant.amount.max)}`
+                    : formatCurrency(grant.amount.max)
+                  }
+                </div>
+              ) : (
+                <div className="text-sm text-slate-400">See Details</div>
+              )}
             </div>
-            <div className="text-right">
+            <div className="bg-slate-800/50 rounded-lg p-3">
               <div className="flex items-center gap-1 text-xs text-slate-500 mb-1">
                 <Calendar className="w-3 h-3" />
                 Deadline
               </div>
-              <div className="text-sm text-white">{formatDate(grant.deadline)}</div>
+              <div className="text-sm font-medium text-white">
+                {grant.deadline && grant.deadline !== "Open" && grant.deadline !== "" 
+                  ? formatDate(grant.deadline)
+                  : <span className="text-emerald-400">Open</span>
+                }
+              </div>
             </div>
           </div>
 
-          {/* View details button */}
-          <Button 
-            variant="ghost" 
-            className="w-full mt-4 text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 group/btn"
-          >
-            View Details
-            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-          </Button>
+          {/* Action buttons */}
+          <div className="flex gap-2 mt-4">
+            <Button 
+              variant="ghost" 
+              className="flex-1 text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 group/btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                onClick();
+              }}
+            >
+              View Details
+              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+            </Button>
+            <Button 
+              className="flex-1 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white"
+              onClick={(e) => {
+                e.stopPropagation();
+                window.open(grant.applicationUrl, '_blank');
+              }}
+            >
+              Apply Now
+              <ExternalLink className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
         </div>
       </Card>
     </motion.div>

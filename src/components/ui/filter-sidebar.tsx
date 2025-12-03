@@ -5,8 +5,22 @@ import { Filter, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
-import { categories } from "@/data/mockGrants";
 import { formatCurrency } from "@/lib/utils";
+
+// Categories for filtering grants
+const categories = [
+  "Healthcare",
+  "Education",
+  "Environment",
+  "Research",
+  "Social Services",
+  "Small Business",
+  "Arts & Culture",
+  "Agriculture",
+  "Infrastructure",
+  "Defense",
+  "Other",
+];
 
 interface FilterSidebarProps {
   selectedCategories: string[];
@@ -31,7 +45,7 @@ export function FilterSidebar({
     }
   };
 
-  const hasActiveFilters = selectedCategories.length > 0 || amountRange[0] > 0 || amountRange[1] < 5000000;
+  const hasActiveFilters = selectedCategories.length > 0 || amountRange[0] > 0 || amountRange[1] < 100000000;
 
   return (
     <motion.aside
@@ -94,8 +108,8 @@ export function FilterSidebar({
             <Slider
               value={amountRange}
               min={0}
-              max={5000000}
-              step={10000}
+              max={100000000}
+              step={100000}
               onValueChange={(value) => onAmountChange(value as [number, number])}
               className="mb-4"
             />
@@ -116,7 +130,7 @@ export function FilterSidebar({
             <div className="flex items-center justify-between">
               <span className="text-sm text-slate-400">Active filters</span>
               <Badge className="bg-violet-600/20 text-violet-400 border-violet-500/30">
-                {selectedCategories.length + (amountRange[0] > 0 || amountRange[1] < 5000000 ? 1 : 0)}
+                {selectedCategories.length + (amountRange[0] > 0 || amountRange[1] < 100000000 ? 1 : 0)}
               </Badge>
             </div>
           </motion.div>
