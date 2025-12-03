@@ -7,19 +7,23 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { formatCurrency } from "@/lib/utils";
 
-// Categories for filtering grants
+// Categories matching Grants.gov API funding_categories
+// Maps display name to API value
 const categories = [
-  "Healthcare",
-  "Education",
-  "Environment",
-  "Research",
-  "Social Services",
-  "Small Business",
-  "Arts & Culture",
-  "Agriculture",
-  "Infrastructure",
-  "Defense",
-  "Other",
+  { label: "Health", value: "health" },
+  { label: "Education", value: "education" },
+  { label: "Environment", value: "environment" },
+  { label: "Science & Research", value: "science_technology_and_other_research_and_development" },
+  { label: "Social Services", value: "income_security_and_social_services" },
+  { label: "Community Development", value: "community_development" },
+  { label: "Agriculture", value: "agriculture" },
+  { label: "Transportation", value: "transportation" },
+  { label: "Energy", value: "energy" },
+  { label: "Employment & Training", value: "employment_labor_and_training" },
+  { label: "Arts & Humanities", value: "humanities" },
+  { label: "Food & Nutrition", value: "food_and_nutrition" },
+  { label: "Natural Resources", value: "natural_resources" },
+  { label: "Other", value: "other" },
 ];
 
 interface FilterSidebarProps {
@@ -83,16 +87,16 @@ export function FilterSidebar({
           <div className="flex flex-wrap gap-2">
             {categories.map((category) => (
               <Badge
-                key={category}
-                variant={selectedCategories.includes(category) ? "default" : "outline"}
+                key={category.value}
+                variant={selectedCategories.includes(category.value) ? "default" : "outline"}
                 className={`cursor-pointer transition-all duration-200 ${
-                  selectedCategories.includes(category)
+                  selectedCategories.includes(category.value)
                     ? "bg-violet-600 hover:bg-violet-500 text-white border-violet-600"
                     : "border-slate-600 text-slate-400 hover:border-violet-500 hover:text-violet-400"
                 }`}
-                onClick={() => toggleCategory(category)}
+                onClick={() => toggleCategory(category.value)}
               >
-                {category}
+                {category.label}
               </Badge>
             ))}
           </div>

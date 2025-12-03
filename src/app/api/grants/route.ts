@@ -39,6 +39,13 @@ async function searchSimplerGrants(
     body.query = filters.keyword.trim();
   }
 
+  // Add funding category filter if provided
+  if (filters.categories && filters.categories.length > 0) {
+    (body.filters as Record<string, unknown>).funding_category = {
+      one_of: filters.categories
+    };
+  }
+
   // Add agency filter if provided
   if (filters.agencies && filters.agencies.length > 0) {
     (body.filters as Record<string, unknown>).agency = {
@@ -232,13 +239,44 @@ interface SimplerGrantsResponse {
   };
 }
 
+// Map API funding_category to display label
+const FUNDING_CATEGORY_LABELS: Record<string, string> = {
+  health: "Health",
+  education: "Education",
+  environment: "Environment",
+  science_technology_and_other_research_and_development: "Science & Research",
+  income_security_and_social_services: "Social Services",
+  community_development: "Community Development",
+  agriculture: "Agriculture",
+  transportation: "Transportation",
+  energy: "Energy",
+  employment_labor_and_training: "Employment & Training",
+  humanities: "Arts & Humanities",
+  food_and_nutrition: "Food & Nutrition",
+  natural_resources: "Natural Resources",
+  other: "Other",
+  affordable_care_act: "Health",
+  recovery_act: "Other",
+  information_and_statistics: "Science & Research",
+  opportunity_zone_benefits: "Community Development",
+};
+
+function getCategoryLabel(fundingCategories: string[] | null): string {
+  if (!fundingCategories || fundingCategories.length === 0) {
+    return "Other";
+  }
+  // Use the first category
+  const firstCat = fundingCategories[0];
+  return FUNDING_CATEGORY_LABELS[firstCat] || "Other";
+}
+
 function transformSimplerGrantsResults(response: SimplerGrantsResponse) {
   const opportunities = response.data || [];
   console.log("Transforming", opportunities.length, "grants from Simpler Grants API");
   
   const grants = opportunities.map((opp, index) => {
     const summary = opp.summary || {};
-    const category = getCategoryFromAgency(opp.agency_name || opp.top_level_agency_name || "");
+    const category = getCategoryLabel(summary.funding_categories);
 
     // Get funding amount - use award_ceiling, or estimated_total_program_funding as fallback
     const awardCeiling = summary.award_ceiling || summary.estimated_total_program_funding || 0;

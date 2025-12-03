@@ -15,17 +15,19 @@ interface GrantCardProps {
 }
 
 const categoryColors: Record<string, string> = {
-  Technology: "from-blue-500 to-cyan-500",
-  Healthcare: "from-rose-500 to-pink-500",
+  Health: "from-rose-500 to-pink-500",
   Education: "from-amber-500 to-orange-500",
   Environment: "from-emerald-500 to-green-500",
-  "Arts & Culture": "from-purple-500 to-violet-500",
+  "Science & Research": "from-teal-500 to-cyan-500",
   "Social Services": "from-indigo-500 to-blue-500",
-  Research: "from-teal-500 to-cyan-500",
-  "Small Business": "from-orange-500 to-red-500",
+  "Community Development": "from-purple-500 to-violet-500",
   Agriculture: "from-lime-500 to-green-500",
-  Infrastructure: "from-gray-500 to-slate-500",
-  Defense: "from-red-600 to-rose-600",
+  Transportation: "from-gray-500 to-slate-500",
+  Energy: "from-yellow-500 to-orange-500",
+  "Employment & Training": "from-blue-500 to-indigo-500",
+  "Arts & Humanities": "from-pink-500 to-purple-500",
+  "Food & Nutrition": "from-green-500 to-emerald-500",
+  "Natural Resources": "from-cyan-500 to-teal-500",
   Other: "from-slate-500 to-slate-600",
 };
 
