@@ -259,7 +259,7 @@ function transformSimplerGrantsResults(response: SimplerGrantsResponse) {
         "Grants.gov registration",
         "Application submission via Grants.gov",
       ],
-      applicationUrl: `https://www.grants.gov/search-results-detail/${opp.opportunity_id}`,
+      applicationUrl: `https://www.grants.gov/search-results-detail/${opp.opportunity_number}`,
       featured: awardCeiling > 1000000,
       matchPercentage,
       source: "grants.gov",
