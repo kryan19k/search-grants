@@ -28,9 +28,9 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl bg-slate-900 border-slate-700 text-white overflow-hidden p-0">
+      <DialogContent className="max-w-2xl w-[95vw] sm:w-full bg-slate-900 border-slate-700 text-white overflow-hidden p-0">
         {/* Header with gradient */}
-        <div className="relative p-6 pb-4 bg-gradient-to-br from-violet-600/20 to-indigo-600/20">
+        <div className="relative p-4 sm:p-6 pb-4 bg-gradient-to-br from-violet-600/20 to-indigo-600/20">
           <DialogHeader>
             <div className="flex items-center gap-2 mb-2">
               <Badge className="bg-violet-600 text-white">{grant.category}</Badge>
@@ -41,7 +41,7 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
                 </Badge>
               )}
             </div>
-            <DialogTitle className="text-2xl font-bold text-white pr-8">
+            <DialogTitle className="text-xl sm:text-2xl font-bold text-white pr-16 sm:pr-8">
               {grant.title}
             </DialogTitle>
             <div className="flex items-center gap-2 text-slate-300 mt-2">
@@ -51,9 +51,9 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
           </DialogHeader>
 
           {/* Match score */}
-          <div className="absolute top-6 right-6">
-            <div className="relative w-16 h-16">
-              <svg className="w-16 h-16 -rotate-90">
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+            <div className="relative w-12 h-12 sm:w-16 sm:h-16">
+              <svg className="w-12 h-12 sm:w-16 sm:h-16 -rotate-90" viewBox="0 0 64 64">
                 <circle
                   cx="32"
                   cy="32"
@@ -83,28 +83,28 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
                 </defs>
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-lg font-bold text-white">{grant.matchPercentage}%</span>
-                <span className="text-[10px] text-slate-400">Match</span>
+                <span className="text-sm sm:text-lg font-bold text-white">{grant.matchPercentage}%</span>
+                <span className="text-[8px] sm:text-[10px] text-slate-400">Match</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6 max-h-[60vh] overflow-y-auto">
           {/* Key info cards */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4">
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50"
+              className="p-3 sm:p-4 rounded-lg bg-slate-800/50 border border-slate-700/50"
             >
               <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
                 <DollarSign className="w-4 h-4" />
                 Funding Amount
               </div>
-              <div className="text-lg font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              <div className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 {grant.amount.max > 0 ? (
                   grant.amount.min > 0 && grant.amount.min !== grant.amount.max
                     ? `${formatCurrency(grant.amount.min)} - ${formatCurrency(grant.amount.max)}`
@@ -119,13 +119,13 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="p-4 rounded-lg bg-slate-800/50 border border-slate-700/50"
+              className="p-3 sm:p-4 rounded-lg bg-slate-800/50 border border-slate-700/50"
             >
               <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
                 <Calendar className="w-4 h-4" />
                 Application Deadline
               </div>
-              <div className="text-lg font-semibold text-white">
+              <div className="text-lg sm:text-xl font-semibold text-white">
                 {formatDate(grant.deadline)}
               </div>
             </motion.div>
@@ -137,7 +137,7 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <h3 className="text-sm font-medium text-slate-400 mb-2">Description</h3>
+            <h3 className="text-sm sm:text-base font-medium text-slate-400 mb-2">Description</h3>
             <p className="text-slate-300 leading-relaxed">{grant.description}</p>
           </motion.div>
 
@@ -147,7 +147,7 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <h3 className="text-sm font-medium text-slate-400 mb-3">Eligibility</h3>
+            <h3 className="text-sm sm:text-base font-medium text-slate-400 mb-3">Eligibility</h3>
             <div className="space-y-2">
               {grant.eligibility.map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
@@ -164,7 +164,7 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <h3 className="text-sm font-medium text-slate-400 mb-3">Requirements</h3>
+            <h3 className="text-sm sm:text-base font-medium text-slate-400 mb-3">Requirements</h3>
             <div className="space-y-2">
               {grant.requirements.map((item, index) => (
                 <div key={index} className="flex items-center gap-2">
@@ -177,8 +177,8 @@ export function GrantDetailModal({ grant, isOpen, onClose }: GrantDetailModalPro
         </div>
 
         {/* Footer */}
-        <div className="p-6 pt-4 border-t border-slate-700/50 bg-slate-900/50">
-          <div className="flex gap-3">
+        <div className="p-4 sm:p-6 pt-4 border-t border-slate-700/50 bg-slate-900/50">
+          <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
             <Button
               variant="outline"
               className="flex-1 border-slate-600 text-slate-300 hover:bg-slate-800"

@@ -99,10 +99,10 @@ export default function Home() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex items-center justify-between mb-6"
+                className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6"
               >
                 <div>
-                  <h2 className="text-2xl font-bold text-white">Available Grants</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">Available Grants</h2>
                   <p className="text-slate-400 text-sm mt-1">
                     {loading ? (
                       "Loading grants..."
@@ -177,7 +177,7 @@ export default function Home() {
                       </div>
 
                       {/* Pagination */}
-                      <div className="flex items-center justify-center gap-4 mt-10">
+                      <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 mt-10">
                         <Button
                           variant="outline"
                           size="sm"

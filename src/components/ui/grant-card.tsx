@@ -52,9 +52,9 @@ export function GrantCard({ grant, index, onClick }: GrantCardProps) {
         {/* Hover glow effect */}
         <div className={`absolute inset-0 bg-gradient-to-br ${gradientColor} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {/* Header */}
-          <div className="flex items-start justify-between gap-4 mb-4">
+          <div className="flex items-start justify-between gap-2 sm:gap-4 mb-4">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <Badge 
@@ -77,8 +77,8 @@ export function GrantCard({ grant, index, onClick }: GrantCardProps) {
             
             {/* Match percentage */}
             <div className="flex-shrink-0">
-              <div className="relative w-14 h-14">
-                <svg className="w-14 h-14 -rotate-90">
+              <div className="relative w-11 h-11 sm:w-14 sm:h-14">
+                <svg className="w-11 h-11 sm:w-14 sm:h-14 -rotate-90" viewBox="0 0 56 56">
                   <circle
                     cx="28"
                     cy="28"
@@ -108,7 +108,7 @@ export function GrantCard({ grant, index, onClick }: GrantCardProps) {
                   </defs>
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-sm font-bold text-white">{grant.matchPercentage}%</span>
+                  <span className="text-xs sm:text-sm font-bold text-white">{grant.matchPercentage}%</span>
                 </div>
               </div>
             </div>
@@ -126,8 +126,8 @@ export function GrantCard({ grant, index, onClick }: GrantCardProps) {
           </p>
 
           {/* Funding & Deadline */}
-          <div className="grid grid-cols-2 gap-3 pt-4 border-t border-slate-700/50">
-            <div className="bg-slate-800/50 rounded-lg p-3">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 pt-4 border-t border-slate-700/50">
+            <div className="bg-slate-800/50 rounded-lg p-2 sm:p-3">
               <div className="flex items-center gap-1 text-xs text-slate-500 mb-1">
                 <DollarSign className="w-3 h-3" />
                 Award Amount
@@ -143,7 +143,7 @@ export function GrantCard({ grant, index, onClick }: GrantCardProps) {
                 <div className="text-sm text-slate-400">See Details</div>
               )}
             </div>
-            <div className="bg-slate-800/50 rounded-lg p-3">
+            <div className="bg-slate-800/50 rounded-lg p-2 sm:p-3">
               <div className="flex items-center gap-1 text-xs text-slate-500 mb-1">
                 <Calendar className="w-3 h-3" />
                 Deadline
@@ -158,27 +158,27 @@ export function GrantCard({ grant, index, onClick }: GrantCardProps) {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-2 mt-4">
+          <div className="flex flex-col xs:flex-row gap-2 mt-4">
             <Button 
               variant="ghost" 
-              className="flex-1 text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 group/btn"
+              className="flex-1 text-violet-400 hover:text-violet-300 hover:bg-violet-500/10 group/btn text-sm"
               onClick={(e) => {
                 e.stopPropagation();
                 onClick();
               }}
             >
               View Details
-              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+              <ArrowRight className="w-4 h-4 ml-1 sm:ml-2 group-hover/btn:translate-x-1 transition-transform" />
             </Button>
             <Button 
-              className="flex-1 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white"
+              className="flex-1 bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white text-sm"
               onClick={(e) => {
                 e.stopPropagation();
                 window.open(grant.applicationUrl, '_blank');
               }}
             >
               Apply Now
-              <ExternalLink className="w-4 h-4 ml-2" />
+              <ExternalLink className="w-4 h-4 ml-1 sm:ml-2" />
             </Button>
           </div>
         </div>
