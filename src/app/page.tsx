@@ -28,13 +28,13 @@ export default function Home() {
     currentPage,
     hasNextPage,
     hasPreviousPage,
-    search,
+    setFilters,
     nextPage,
     previousPage,
     refresh,
   } = useGrants({ limit: 12 });
 
-  // Debounce search
+  // Debounce search and filters
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchQuery);
@@ -42,25 +42,28 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Trigger search when debounced value changes
+  // Update filters when search or categories change
   useEffect(() => {
-    search(debouncedSearch);
-  }, [debouncedSearch, search]);
+    setFilters({
+      keyword: debouncedSearch,
+      categories: selectedCategories,
+    });
+  }, [debouncedSearch, selectedCategories, setFilters]);
 
-  // Filter grants client-side for category and amount (API handles keyword search)
+  // Filter grants client-side for amount only (API handles keyword and category)
   const filteredGrants = useMemo(() => {
     return grants.filter((grant) => {
-      // Category filter
-      const matchesCategory =
-        selectedCategories.length === 0 || selectedCategories.includes(grant.category);
-
-      // Amount filter
-      const matchesAmount =
-        grant.amount.max >= amountRange[0] && grant.amount.min <= amountRange[1];
-
-      return matchesCategory && matchesAmount;
+      // Amount filter (client-side since API doesn't support it well)
+      const grantMax = grant.amount.max || 0;
+      const grantMin = grant.amount.min || 0;
+      
+      // If grant has no amount info, include it
+      if (grantMax === 0 && grantMin === 0) return true;
+      
+      // Check if grant amount overlaps with filter range
+      return grantMax >= amountRange[0] && grantMin <= amountRange[1];
     });
-  }, [grants, selectedCategories, amountRange]);
+  }, [grants, amountRange]);
 
   const handleGrantClick = (grant: Grant) => {
     setSelectedGrant(grant);
@@ -148,7 +151,7 @@ export default function Home() {
                   className="flex flex-col items-center justify-center py-20"
                 >
                   <Loader2 className="w-12 h-12 text-violet-500 animate-spin mb-4" />
-                  <p className="text-slate-400">Fetching grants from USAspending.gov...</p>
+                  <p className="text-slate-400">Fetching grants from Grants.gov...</p>
                 </motion.div>
               )}
 

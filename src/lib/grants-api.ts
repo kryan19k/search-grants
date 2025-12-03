@@ -1,7 +1,5 @@
-// Grants API Service - Client-side module
-// Calls our Next.js API route which handles Grants.gov and USAspending APIs
-
-// ============ UNIFIED GRANT TYPE ============
+// Grants API Service - Client-side API module for grants search
+// Uses our Next.js API route which handles Grants.gov and USAspending APIs
 
 export interface Grant {
   id: string;
@@ -19,15 +17,19 @@ export interface Grant {
   applicationUrl: string;
   featured: boolean;
   matchPercentage: number;
-  source: "grants.gov" | "usaspending";
+  source: string;
   status?: string;
   postedDate?: string;
   opportunityNumber?: string;
 }
 
-// ============ API RESPONSE TYPE ============
+export interface SearchFilters {
+  keyword?: string;
+  categories?: string[];
+  agencies?: string[];
+}
 
-interface SearchResponse {
+export interface SearchResponse {
   grants: Grant[];
   totalCount: number;
   hasNext: boolean;
@@ -35,19 +37,23 @@ interface SearchResponse {
   error?: string;
 }
 
-// ============ SEARCH FUNCTION ============
-
 export async function searchAllGrants(
-  keyword: string = "",
   page: number = 1,
-  limit: number = 12
-): Promise<{ grants: Grant[]; totalCount: number; hasNext: boolean }> {
+  limit: number = 12,
+  filters: SearchFilters = {}
+): Promise<SearchResponse> {
   const response = await fetch("/api/grants", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ keyword, page, limit }),
+    body: JSON.stringify({
+      keyword: filters.keyword || "",
+      page,
+      limit,
+      categories: filters.categories || [],
+      agencies: filters.agencies || [],
+    }),
   });
 
   if (!response.ok) {
@@ -57,9 +63,5 @@ export async function searchAllGrants(
 
   const data: SearchResponse = await response.json();
 
-  return {
-    grants: data.grants,
-    totalCount: data.totalCount,
-    hasNext: data.hasNext,
-  };
+  return data;
 }

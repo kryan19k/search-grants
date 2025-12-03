@@ -5,7 +5,17 @@ const USA_SPENDING_URL = "https://api.usaspending.gov/api/v2";
 
 // ============ SIMPLER GRANTS.GOV SEARCH ============
 
-async function searchSimplerGrants(keyword: string, pageSize: number, pageOffset: number) {
+interface SearchFilters {
+  keyword?: string;
+  categories?: string[];
+  agencies?: string[];
+}
+
+async function searchSimplerGrants(
+  pageSize: number,
+  pageOffset: number,
+  filters: SearchFilters = {}
+) {
   const body: Record<string, unknown> = {
     pagination: {
       page_size: pageSize,
@@ -24,9 +34,16 @@ async function searchSimplerGrants(keyword: string, pageSize: number, pageOffset
     }
   };
 
-  // Add keyword filter if provided
-  if (keyword && keyword.trim()) {
-    body.query = keyword.trim();
+  // Add keyword/query filter
+  if (filters.keyword && filters.keyword.trim()) {
+    body.query = filters.keyword.trim();
+  }
+
+  // Add agency filter if provided
+  if (filters.agencies && filters.agencies.length > 0) {
+    (body.filters as Record<string, unknown>).agency = {
+      one_of: filters.agencies
+    };
   }
 
   const headers: Record<string, string> = {
@@ -328,11 +345,15 @@ function transformUSASpendingResults(data: {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { keyword = "", page = 1, limit = 12 } = body;
+    const { keyword = "", page = 1, limit = 12, categories = [], agencies = [] } = body;
 
     // Try Simpler Grants API first (requires API key)
     try {
-      const simplerGrantsData = await searchSimplerGrants(keyword, limit, page);
+      const simplerGrantsData = await searchSimplerGrants(limit, page, {
+        keyword,
+        categories,
+        agencies,
+      });
       const result = transformSimplerGrantsResults(simplerGrantsData);
 
       return NextResponse.json({

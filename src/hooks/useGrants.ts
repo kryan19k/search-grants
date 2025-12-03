@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { searchAllGrants, Grant } from "@/lib/grants-api";
+import { searchAllGrants, Grant, SearchFilters } from "@/lib/grants-api";
 
 interface UseGrantsOptions {
   initialPage?: number;
@@ -16,7 +16,7 @@ interface UseGrantsReturn {
   currentPage: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
-  search: (keywords: string) => void;
+  setFilters: (filters: SearchFilters) => void;
   nextPage: () => void;
   previousPage: () => void;
   refresh: () => void;
@@ -31,14 +31,14 @@ export function useGrants(options: UseGrantsOptions = {}): UseGrantsReturn {
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [hasNextPage, setHasNextPage] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState("");
+  const [filters, setFiltersState] = useState<SearchFilters>({});
 
   const fetchGrants = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await searchAllGrants(searchKeyword, currentPage, limit);
+      const response = await searchAllGrants(currentPage, limit, filters);
       
       setGrants(response.grants);
       setTotalCount(response.totalCount);
@@ -49,14 +49,14 @@ export function useGrants(options: UseGrantsOptions = {}): UseGrantsReturn {
     } finally {
       setLoading(false);
     }
-  }, [searchKeyword, currentPage, limit]);
+  }, [filters, currentPage, limit]);
 
   useEffect(() => {
     fetchGrants();
   }, [fetchGrants]);
 
-  const search = useCallback((keyword: string) => {
-    setSearchKeyword(keyword.trim());
+  const setFilters = useCallback((newFilters: SearchFilters) => {
+    setFiltersState(newFilters);
     setCurrentPage(1);
   }, []);
 
@@ -84,12 +84,12 @@ export function useGrants(options: UseGrantsOptions = {}): UseGrantsReturn {
     currentPage,
     hasNextPage,
     hasPreviousPage: currentPage > 1,
-    search,
+    setFilters,
     nextPage,
     previousPage,
     refresh,
   };
 }
 
-// Re-export Grant type for convenience
-export type { Grant } from "@/lib/grants-api";
+// Re-export types for convenience
+export type { Grant, SearchFilters } from "@/lib/grants-api";
